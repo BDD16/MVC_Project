@@ -1,0 +1,98 @@
+package Controller;
+
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import Model.Authentication;
+import Model.GammaEngine;
+import Model.GammaMachine;
+import View.MainChat;
+import View.Mainwindow;
+import View.Settings;
+
+public class AuthenticationController implements MouseListener {
+	
+	private Mainwindow MainView;
+	private GammaMachine model;
+	private MainChat MainChatView;
+	private GammaEngine Encryption;
+	private Settings settingsView;
+	
+	public AuthenticationController(Mainwindow mainview){
+		MainView = mainview;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
+		//THIS NEEDS TO HAVE IT'S OWN CONTROLLER
+				//use this as a view switcher
+				//each class is a view
+				//so close the main window after logging on and open a new window
+				this.MainView.setUsername(this.MainView.getLogin().getText());
+				this.MainView.setPassword(this.MainView.getPassword());
+				this.MainView.setPasswordstring(this.MainView.getPassword().getPassword().toString());
+				
+				//TODO: AUTHENTICATION
+				
+				//if the Authentication succeeds then open the view
+				if(Authentication.VerifyPassword(this.MainView.getUsername(), 
+						this.MainView.getPassword())){
+					this.MainView.getView().setVisible(false);
+					MainChat chatview = new MainChat();
+					chatview.addMouseListener(this);
+					chatview.controller.setMainWindow(this.MainView);
+					this.MainView.getWindow().remove(this.MainView.getView());
+					this.MainView.setView(chatview.getView());
+					this.MainView.getView().setVisible(true);
+					this.MainView.getWindow().add(chatview.getView());
+				}
+				
+				else{
+					//
+					JFrame messageBox = new JFrame("Unable to login");
+					JPanel message = new JPanel();
+					JLabel whoa = new JLabel();
+					JButton okay = new JButton("Okay");
+					whoa.setText("Unable to login");
+					message.add(whoa);
+					message.add(okay);
+					messageBox.add(message);
+					messageBox.setLocationRelativeTo(this.MainView.getWindow());
+					messageBox.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);//so it doesn't close out the whole program
+					messageBox.setVisible(true);
+					messageBox.setSize(300, 100);
+					System.out.println("failed to login");
+				}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
