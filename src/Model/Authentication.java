@@ -29,7 +29,7 @@ public class Authentication extends AbstractModel {
 	
 	public static boolean DoesUsernameExist(String Username){
 		//lookup from a database that the Username exists;
-		//TODO: need to add in a spring based database using KEK and whatnot
+		//TODO: need to add in a spring based database
 		
 		return true;
 	}
