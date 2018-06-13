@@ -21,11 +21,18 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import Controller.HulkController;
+import Controller.SettingsSmasher;
 import Model.DrBanner;
+import Model.GammaEngine;
 import Model.GammaMachine;
+import Model.ViewHolder;
 
 public class Settings extends JFrame {
 	JPanel view;
+	public SettingsSmasher controller;
+	
+	public ViewHolder AllViews;
+	
 	public Settings(){
 		Init();
 	}
@@ -45,8 +52,10 @@ public class Settings extends JFrame {
 		JLabel settingsimg = new JLabel();
 		settingsimg.setName("Settings");
 		
-		JTextField Rsakeypath = new JTextField("RSA Key Location");
-		JTextField AESkeyPath = new JTextField("AES key Location");
+		JTextField Rsakeypath = new JTextField("RSA Public Key Location");
+		JTextField RsakeypathPriv = new JTextField("RSA Private Key Location");
+		JTextField AESkeyPath = new JTextField("AES Key Location");
+		RsakeypathPriv.setLayout(null);
 		Rsakeypath.setLayout(null);
 		AESkeyPath.setLayout(null);
 		
@@ -91,6 +100,8 @@ public class Settings extends JFrame {
 		logoutimg.setToolTipText("Logout");
 		friendsimg.setToolTipText("Avengers List");
 		settingsimg.setToolTipText("Back to the Lab");
+		
+		gamma.setName("gammaButton");
 
 		gamma.setIcon(gammaicon);
 		logoutimg.setIcon(logouticon);
@@ -100,17 +111,36 @@ public class Settings extends JFrame {
 		logoutimg.setBounds(25,45,75,27);
 		friendsimg.setBounds(125,25,75,50);
 		Rsakeypath.setBounds(25, 200, 200, 25);
+		RsakeypathPriv.setBounds(25,285, 200,25);
 		AESkeyPath.setBounds(25,250, 200, 25);
+		
 		
 		JTabbedPane.setVisible(true);
 		Rsakeypath.setVisible(true);
 		AESkeyPath.setVisible(true);
+		
+		//add listeners
+		try {
+			Rsakeypath.setName("RSAPublicKey");
+			RsakeypathPriv.setName("RSAPrivateKey");
+			Rsakeypath.addMouseListener((MouseListener) (controller = (new SettingsSmasher(this, new GammaMachine()))));
+			RsakeypathPriv.addMouseListener(controller);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		gamma.addMouseListener(controller);
 		
 		panel.add(JTabbedPane);
 		panel.add(gamma);
 		panel.add(logoutimg);
 		panel.add(friendsimg);
 		panel.add(Rsakeypath);
+		panel.add(RsakeypathPriv);
 		panel.add(AESkeyPath);
 		
 		//Add the tabbed pane to this panel.
@@ -120,6 +150,8 @@ public class Settings extends JFrame {
         JTabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		
 		this.view = panel;
+		
+		this.setName("SettingsView");
 		
 	}
 	

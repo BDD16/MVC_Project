@@ -10,8 +10,13 @@ import javax.swing.*;
 
 import Controller.AuthenticationController;
 import Model.Authentication;
+import Model.ViewHolder;
 
 public class Mainwindow extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5203647673128224782L;
 	Authentication Authentication;
 	private JFrame Window;
 	private JTextArea login;
@@ -21,19 +26,22 @@ public class Mainwindow extends JFrame{
 	private String passwordstring;
 	JButton button;
 	
+	public ViewHolder AllViews;
+	
 	//put the main view panel
 	JPanel view;
 	
-	Mainwindow(){
+	public Mainwindow(){
+		super();
 		this.Init();
 	}
 	
 	public void Init(){
-		this.setWindow(new JFrame("Hulk Chat App"));
-		this.getWindow().setSize(400,647);//done by the golden ratio
-		this.getWindow().setOpacity((float) 1.0);
-		this.getWindow().setLocationRelativeTo(null);
-		this.getWindow().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	//	this.setWindow(new JFrame("Hulk Chat App"));
+	//	this.getWindow().setSize(400,647);//done by the golden ratio
+	//	this.getWindow().setOpacity((float) 1.0);
+	//	this.getWindow().setLocationRelativeTo(null);
+	//	this.getWindow().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.setLogin(new JTextArea("Username"));
 		this.getLogin().setLayout(null);
@@ -90,12 +98,20 @@ public class Mainwindow extends JFrame{
 		this.view = panel;
 		//add event listeners to button
 		button.addMouseListener((MouseListener) new AuthenticationController(this));
-		this.getWindow().add(panel);
-		this.getWindow().setVisible(true);
+		//this.getWindow().add(panel);
+		//this.getWindow().setVisible(true);
+		
+		this.setName("LoginWindow");
+		AllViews = new ViewHolder();
+		AllViews.addToViewArray(this);
+		
 	}
 	
 	public static void main(String[] args){
-		Mainwindow test = new Mainwindow();
+		WindowContainer test = new WindowContainer();
+		Mainwindow      login = new Mainwindow();
+		test.setWindow(login.view);
+		login.AllViews.addToViewArray(test);
 	}
 	
 	public void addHulkListenner(ActionListener HulkListener){
@@ -110,7 +126,7 @@ public class Mainwindow extends JFrame{
 		Window = window;
 	}
 	
-	public JPanel getView(){
+	public Component getView(){
 		return view;
 	}
 	

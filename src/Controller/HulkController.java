@@ -11,12 +11,14 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 import Model.GammaEngine;
 import Model.GammaMachine;
 import View.MainChat;
 import View.Mainwindow;
 import View.Settings;
+import View.WindowContainer;
 
 public class HulkController implements MouseListener{
 	private Mainwindow MainView;
@@ -146,14 +148,31 @@ public class HulkController implements MouseListener{
 	  if(e.getComponent().getName() == "Settings"){
 		  System.out.println("this is another button click for settings");
 		    this.MainView.getView().setVisible(false);
+		    WindowContainer original = null;
+			original =  (WindowContainer) MainView.AllViews.getView("WindowContainer");
+
 			Settings settings = new Settings();
+			settings.AllViews = this.MainChatView.AllViews;
+			settings.AllViews.addToViewArray(settings);
 			this.settingsView = settings;
-			this.MainView.getWindow().remove(this.MainChatView.getView());
-			this.MainView.getWindow().add(settingsView.getView());
-			this.MainView.setView(settingsView.getView());
-			this.MainView.getView().setVisible(true);
-			this.MainView.getWindow().add(settingsView.getView());
+			original.getWindow().remove(this.MainChatView.getView());
+		    original.setWindow((JPanel)settingsView.getView());
+			original.getWindow().setVisible(true);
 			
+			
+	  }
+	  
+	  if(e.getComponent().getName() == "LogoutButton"){
+		  System.out.println("We Are Logging Out");
+		  WindowContainer original = null;
+		  original =  (WindowContainer) MainChatView.AllViews.getView("WindowContainer");
+
+		 MainView = new Mainwindow();
+		 MainView.AllViews = MainChatView.AllViews;
+		 this.MainChatView.getView().setVisible(false);
+		 original.getWindow().remove(this.MainChatView.getView());
+		 original.setWindow((JPanel) MainView.getView());
+		 original.getWindow().setVisible(true);
 			
 	  }
 	}

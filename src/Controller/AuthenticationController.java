@@ -14,6 +14,7 @@ import Model.GammaMachine;
 import View.MainChat;
 import View.Mainwindow;
 import View.Settings;
+import View.WindowContainer;
 
 public class AuthenticationController implements MouseListener {
 	
@@ -55,14 +56,18 @@ public class AuthenticationController implements MouseListener {
 				//if the Authentication succeeds then open the view
 				if(Authentication.VerifyPassword(this.MainView.getUsername(), 
 						this.MainView.getPassword())){
+					WindowContainer original = null;
+					original =  (WindowContainer) MainView.AllViews.getView("WindowContainer");
+		
 					this.MainView.getView().setVisible(false);
 					MainChat chatview = new MainChat();
+					chatview.AllViews = this.MainView.AllViews;
+					chatview.AllViews.addToViewArray(chatview);
 					chatview.addMouseListener(this);
 					chatview.controller.setMainWindow(this.MainView);
-					this.MainView.getWindow().remove(this.MainView.getView());
-					this.MainView.setView(chatview.getView());
-					this.MainView.getView().setVisible(true);
-					this.MainView.getWindow().add(chatview.getView());
+					original.getWindow().remove(this.MainView.getView());
+					original.setWindow((JPanel) chatview.getView());
+					original.getWindow().setVisible(true);
 				}
 				
 				else{

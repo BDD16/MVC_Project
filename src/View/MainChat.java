@@ -25,6 +25,7 @@ import Controller.HulkController;
 import Model.DrBanner;
 import Model.GammaEngine;
 import Model.GammaMachine;
+import Model.ViewHolder;
 //turn into MVC design pattern will need to look up more info on this
 public class MainChat extends JFrame {
 	/**
@@ -38,6 +39,8 @@ public class MainChat extends JFrame {
 	private JTextArea plaintextarea;
 	public JLabel gammaLabel;
 	public HulkController controller;
+	
+	public ViewHolder AllViews;
 	
 	public MainChat(){
 		this.Init();
@@ -67,6 +70,7 @@ public class MainChat extends JFrame {
 		cipher.setLayout(null);
 		plaintext.setLayout(null);
 		logoutimg.setLayout(null);
+		logoutimg.setName("LogoutButton");
 		friendsimg.setLayout(null);
 		gamma.setLayout(null);
 		logoutimg.setLayout(null);
@@ -95,6 +99,7 @@ public class MainChat extends JFrame {
 		try {
 			gamma.addMouseListener((MouseListener) (controller = new HulkController(this, (new GammaMachine()))));
 			settingsimg.addMouseListener(controller);
+			logoutimg.addMouseListener(controller);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,6 +139,8 @@ public class MainChat extends JFrame {
 		this.setView(panel);
 		this.setCipherarea(cipher);
 		this.setPlaintextarea(plaintext);
+		
+		this.setName("MainChatView");
 	  
 	}
 	
