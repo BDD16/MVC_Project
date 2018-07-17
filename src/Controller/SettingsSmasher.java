@@ -10,6 +10,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Model.GammaEngine;
 import Model.GammaMachine;
+import View.AvengersList;
 import View.MainChat;
 import View.Mainwindow;
 import View.Settings;
@@ -160,6 +161,7 @@ public class SettingsSmasher implements MouseListener{
 
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
+		           
 		            //This is where a real application would open the file.
 		            
 		        } else {
@@ -182,6 +184,23 @@ public class SettingsSmasher implements MouseListener{
 			
 			else if (e.getComponent().getName() == "AESSymetricKey"){
 				
+			}
+			
+			else if (e.getComponent().getName() == "FriendsList"){
+				System.out.println("We clicked the Friends List");
+				WindowContainer original = null;
+				original =  (WindowContainer) settingsView.AllViews.getView("WindowContainer");
+				
+				AvengersList friendsView = new AvengersList();
+				friendsView.AllViews = settingsView.AllViews;
+				friendsView.AllViews.addToViewArray(friendsView);
+						
+	
+				MainChatView = (MainChat) settingsView.AllViews.getView("MainChatView");
+				MainView =  (Mainwindow) settingsView.AllViews.getView("LoginWindow");
+				original.getWindow().remove(settingsView.getView());
+				original.setWindow((JPanel) friendsView.getView());
+				original.getWindow().setVisible(true);
 			}
 		}
 

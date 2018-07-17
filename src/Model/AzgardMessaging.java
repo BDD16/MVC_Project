@@ -12,11 +12,13 @@ import javax.swing.DefaultListModel;
 
 public class AzgardMessaging extends AbstractModel {
 	DefaultListModel<String> buddylist;
+	ServerSocket listener;
+	public static Thread x;
 	
 	/**
      * The port that the server listens on.
      */
-    private static final int PORT = 9001;
+    private static final int PORT = 9001; //need to be able to handle connections to different ports?  port randomization maybe?
 
     /**
      * The set of all names of clients in the chat room.  Maintained
@@ -45,9 +47,27 @@ public class AzgardMessaging extends AbstractModel {
         } finally {
             listener.close();
         }
-
+        
+     
 
 }
+    
+    public static void TurnServerOn() throws IOException{
+   	 System.out.println("The chat server is running.");
+        ServerSocket listener = new ServerSocket(PORT);
+        
+        try {
+              
+              x = new Thread(new Handler(listener.accept()));
+              x.start();
+               
+               
+            
+        } finally {
+            listener.close(); //should close when everything else closes
+        }
+    }
+
     
     private static class Handler extends Thread {
         private String name;

@@ -12,6 +12,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 import Model.GammaEngine;
 import Model.GammaMachine;
@@ -85,6 +87,7 @@ public class HulkController implements MouseListener{
 			try {
 				GammaMachine hulk = new GammaMachine();
 				hulk.generateKeys();
+				
 				byte[] drbanner = hulk.RSAEncrypt(MainChatView.getPlaintextarea().getText().getBytes(), hulk.getPubkey());
 				MainChatView.getCipherarea().setText(new String(drbanner));
 			} catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException e1) {
@@ -121,6 +124,13 @@ public class HulkController implements MouseListener{
 			
 			ImageIcon ig = new ImageIcon("src/img/GammaSignInvertedSmall.png");
 			MainChatView.gammaLabel.setIcon(ig);
+			
+			SwingUtilities.invokeLater(new Runnable() {
+			    public void run() {
+			    	MainChatView.progressBar.setVisible(true);
+			    
+			    }
+			});
 		}
 	}
 
@@ -133,15 +143,29 @@ public class HulkController implements MouseListener{
 			MainChatView.gammaLabel.setIcon(g);
 			//perform cryptographic operations on the plain text area
 			
+			
 			try {
 				GammaMachine hulk = new GammaMachine();
 				hulk.generateKeys();
 				byte[] drbanner = hulk.RSAEncrypt(MainChatView.getPlaintextarea().getText().getBytes(), hulk.getPubkey());
 				MainChatView.getCipherarea().setText(new String(drbanner));
+				
+				SwingUtilities.invokeLater(new Runnable() {
+				    public void run() {
+				    	//MainChatView.progressBar.setVisible(false);
+				    }
+				});
 			} catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			
+			SwingUtilities.invokeLater(new Runnable() {
+			    public void run() {
+			    	MainChatView.progressBar.setVisible(false);
+                    //MainChatView.progressBar.setValue(MainChatView.progressBar.getValue() + 1);
+			    }
+			});
 			
 		}
 		

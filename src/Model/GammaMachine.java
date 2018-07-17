@@ -1,6 +1,12 @@
 package Model;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 
 import javax.crypto.*;
@@ -10,7 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 public class GammaMachine extends AbstractModel {
 	
 	Cipher cipher;
-	PrivateKey prvkey;
+	private PrivateKey prvkey;
 	private PublicKey pubkey;
 	
 	@SuppressWarnings("static-access")
@@ -22,6 +28,7 @@ public class GammaMachine extends AbstractModel {
 		byte[] result = null;
 		this.cipher.init(this.cipher.ENCRYPT_MODE, key);
 		result = cipher.doFinal(plaintext);
+		result = Base64.getEncoder().encode(result);
 		
 		return result;
 	}
@@ -29,8 +36,8 @@ public class GammaMachine extends AbstractModel {
 	public byte[] RSADecrypt(byte[] ciphertext, Key key) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException{
 		byte[] result = null;
 		cipher.init(cipher.DECRYPT_MODE, key);
-		result = cipher.doFinal(ciphertext);
-		
+		byte[] ciphertextb64 = Base64.getDecoder().decode(ciphertext);
+		result = cipher.doFinal(ciphertextb64);
 		return result;
 	}
 	
@@ -63,11 +70,35 @@ public class GammaMachine extends AbstractModel {
 	}
 
 	public PublicKey getPubkey() {
+		
 		return pubkey;
 	}
 
 	public void setPubkey(PublicKey pubkey) {
 		this.pubkey = pubkey;
+	}
+	
+	public PublicKey  PubKeyreadDerFile(String derFile) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException{
+		PublicKey result = null;
+		Path path = Paths.get(derFile);
+		byte[] pubKeyByteArray = Files.readAllBytes(path);
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pubKeyByteArray);
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+	    result = keyFactory.generatePublic(keySpec);
+	
+		return result;
+		
+	}
+	
+	public PrivateKey PrivKeyreadDerFile(String derFile) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException{
+		PrivateKey result = null;
+		Path path = Paths.get(derFile);
+		byte[] pubKeyByteArray = Files.readAllBytes(path);
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(pubKeyByteArray);
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+	    result = keyFactory.generatePrivate(keySpec);
+		
+		return null;
 	}
 	
 	

@@ -79,6 +79,7 @@ public class Settings extends JFrame {
 		panel.setLayout(null);
 		logoutimg.setLayout(null);
 		friendsimg.setLayout(null);
+		friendsimg.setName("FriendsList");
 		gamma.setLayout(null);
 		logoutimg.setLayout(null);
 	
@@ -134,6 +135,7 @@ public class Settings extends JFrame {
 		}
 		
 		gamma.addMouseListener(controller);
+		friendsimg.addMouseListener(controller);
 		
 		panel.add(JTabbedPane);
 		panel.add(gamma);

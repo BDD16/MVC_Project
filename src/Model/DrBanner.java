@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,11 +14,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 //server chat view that will be stored locally on each machine, so each machine is it's own server.
-public class DrBanner {
+public class DrBanner implements Runnable {
 	BufferedReader in;
     PrintWriter out;
     JTextArea textField = new JTextArea(8,40);
     JTextArea messageArea = new JTextArea(8, 40);
+    private static final int PORT = 9001;
 
 	
 public DrBanner(JTextArea textField, JTextArea messageArea){
@@ -60,18 +63,46 @@ private String getName(JFrame view) {
 /**
  * Connects to the server then enters the processing loop.
  */
-public void run() throws IOException {
+public void run() {
 
     // Make connection and initialize streams
-    String serverAddress = getServerAddress(null);
-    Socket socket = new Socket(serverAddress, 9001);
-    in = new BufferedReader(new InputStreamReader(
-        socket.getInputStream()));
-    out = new PrintWriter(socket.getOutputStream(), true);
+   // String serverAddress = getServerAddress(null);
+    try {
+		System.out.println("This is the server address: " + InetAddress.getLocalHost());
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    Socket socket = null;
+	try {
+		socket = new Socket(InetAddress.getLocalHost(), PORT);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    try {
+		in = new BufferedReader(new InputStreamReader(
+		    socket.getInputStream()));
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+    try {
+		out = new PrintWriter(socket.getOutputStream(), true);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
     // Process all messages from server, according to the protocol.
     while (true) {
-        String line = in.readLine();
+        String line = null;
+		try {
+			line = in.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         if (line.startsWith("SUBMITNAME")) {
             out.println(getName(null));
         } else if (line.startsWith("NAMEACCEPTED")) {

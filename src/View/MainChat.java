@@ -1,6 +1,9 @@
 package View;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -17,11 +20,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ScrollPaneLayout;
+import javax.swing.table.TableCellRenderer;
 
 import Controller.HulkController;
+import Model.CellRenderer;
 import Model.DrBanner;
 import Model.GammaEngine;
 import Model.GammaMachine;
@@ -39,6 +48,10 @@ public class MainChat extends JFrame {
 	private JTextArea plaintextarea;
 	public JLabel gammaLabel;
 	public HulkController controller;
+	public JProgressBar progressBar;
+	
+	private static final int TXT_AREA_ROWS = 25;
+    private static final int TXT_AREA_COLS = 80;
 	
 	public ViewHolder AllViews;
 	
@@ -60,10 +73,17 @@ public class MainChat extends JFrame {
 		ImageIcon friendsicon = new ImageIcon("src/img/FriendsSmall.png");
 		JLabel settingsimg = new JLabel();
 		ImageIcon settingsicon = new ImageIcon("src/img/SettingsSmall.png");
+		JLabel sendimg = new JLabel();
+		ImageIcon sendicon = new ImageIcon("src/img/send_icon_small.png");
+		progressBar = new JProgressBar();
+		progressBar.setVisible(false);
+		progressBar.setLayout(null);
+		progressBar.setIndeterminate(true);
+        progressBar.setBounds(310,575,50,45);
 		
 		settingsimg.setName("Settings");
 		
-		
+		TableCellRenderer cellpattern = new CellRenderer();
 		
 		panel.setLayout(null);
 		message.setLayout(null);
@@ -71,6 +91,9 @@ public class MainChat extends JFrame {
 		plaintext.setLayout(null);
 		logoutimg.setLayout(null);
 		logoutimg.setName("LogoutButton");
+		sendimg.setLayout(null);
+		sendimg.setName("SendButton");
+		sendimg.setIcon(sendicon);
 		friendsimg.setLayout(null);
 		gamma.setLayout(null);
 		logoutimg.setLayout(null);
@@ -90,10 +113,14 @@ public class MainChat extends JFrame {
 		cipher.setBounds(100,475,200,25);
 		cipher.setForeground(Color.getHSBColor(gammayellow[0], gammayellow[1], gammayellow[2]));
 		cipher.setBackground(Color.BLACK);
+		cipher.setEditable(false);
+		cipher.setToolTipText("Cipher Text");
+		cipher.setLineWrap(true);
 		plaintext.setBounds(100,510,200, 75);
 		message.setBorder(BorderFactory.createLineBorder(Color.getHSBColor(purple[0], purple[1], purple[2]), 12));
 		plaintext.setBorder(BorderFactory.createLineBorder(Color.getHSBColor(flamered[0], flamered[1], flamered[2]), 5));
 		plaintext.setLineWrap(true);
+		plaintext.setToolTipText("Enter a Message");
 		
 		gamma.setToolTipText("Click to Encrypt Message");
 		try {
@@ -110,10 +137,16 @@ public class MainChat extends JFrame {
 		logoutimg.setToolTipText("Logout");
 		friendsimg.setToolTipText("Avengers List");
 		settingsimg.setToolTipText("Back to the Lab");
+		sendimg.setToolTipText("Click to Send the Message");
 		//gamma.addMouseListener(this);
 		JScrollPane gammapane = new JScrollPane(cipher);
-		JScrollPane Plaintextpane = new JScrollPane(plaintext);
-		gammapane.setLayout(null);
+		JScrollPane Plaintextpane = new JScrollPane(panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		Plaintextpane.add(plaintext);
+		JTable test = new JTable(TXT_AREA_ROWS,1);
+		test.setDefaultRenderer(Object.class, cellpattern);
+		test.setBounds(100,100,200,350);
+		JScrollPane testpane = new JScrollPane(test,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		Plaintextpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		gammapane.setForeground(Color.getHSBColor(gammayellow[0], gammayellow[1], gammayellow[2]));
 		gammapane.setToolTipText("cipher text area");
 		gammapane.setBackground(Color.black);
@@ -123,17 +156,28 @@ public class MainChat extends JFrame {
 		friendsimg.setIcon(friendsicon);
 		settingsimg.setIcon(settingsicon);
 		gamma.setBounds(310,525,50,50);
+		sendimg.setBounds(310,475, 50,29);
 		logoutimg.setBounds(25,25,75,27);
 		friendsimg.setBounds(125,25,75,27);
 		settingsimg.setBounds(225,25,75,27);
+		
+		testpane.setPreferredSize(new Dimension(200,350));
+		testpane.setBounds(100,100,200,350);
+		panel.setPreferredSize(new Dimension(400,647));
+		
 		panel.add(gamma);
+		panel.add(sendimg);
 		panel.add(logoutimg);
 		panel.add(friendsimg);
 		panel.add(settingsimg);
-		panel.add(message);
-		panel.add(cipher);
+		//panel.add(message);
+		//panel.add(cipher);
 		panel.add(plaintext);
-		DrBanner x = new DrBanner(message, plaintext );
+		//panel.add(test);
+		panel.add(gammapane);
+		panel.add(testpane);
+		panel.add(progressBar);
+		DrBanner x = new DrBanner(message, plaintext);
 		
 		this.gammaLabel = gamma;
 		this.setView(panel);
