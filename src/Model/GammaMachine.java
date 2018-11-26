@@ -16,13 +16,35 @@ import javax.crypto.spec.SecretKeySpec;
 public class GammaMachine extends AbstractModel {
 	
 	Cipher cipher;
+        Cipher AEScipher;
 	private PrivateKey prvkey;
 	private PublicKey pubkey;
+        
+       
 	
 	@SuppressWarnings("static-access")
 	public GammaMachine() throws NoSuchAlgorithmException, NoSuchPaddingException{
 		this.cipher = this.cipher.getInstance("RSA");
+                AEScipher = AEScipher.getInstance("AES/GCM/PKCS5Padding");
 	}
+        
+        public byte[] AESEncrypt(byte[] plaintext, Key key) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
+            byte[] result = null;
+            AEScipher.init(AEScipher.ENCRYPT_MODE, key);
+            result = AEScipher.doFinal(plaintext);
+            result = Base64.getEncoder().encode(result);
+            
+            return result;
+            
+        }
+        
+        public byte[] AESDecrypt(byte[] ciphertext, Key key) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
+            byte[] result = null;
+		AEScipher.init(AEScipher.DECRYPT_MODE, key);
+		byte[] ciphertextb64 = Base64.getDecoder().decode(ciphertext);
+		result = AEScipher.doFinal(ciphertextb64);
+		return result;
+        }
 	
 	public byte[] RSAEncrypt(byte[] plaintext, Key key) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
 		byte[] result = null;

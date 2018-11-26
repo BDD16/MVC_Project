@@ -56,9 +56,9 @@ public class Mainwindow extends JFrame{
 		JLabel logo = new JLabel();
 		JLabel hulkmonster = new JLabel();
 		JLabel loginkey = new JLabel();
-		ImageIcon x = new ImageIcon("src/img/hulkicon.png");
-		ImageIcon y = new ImageIcon("src/img/hulkmonstersmall.png");
-		ImageIcon z = new ImageIcon("src/img/keyiconsmall.png");
+		ImageIcon x = new ImageIcon(getClass().getResource("/img/hulkicon.png"));
+		ImageIcon y = new ImageIcon(getClass().getResource("/img/hulkmonstersmall.png"));
+		ImageIcon z = new ImageIcon(getClass().getResource("/img/keyiconsmall.png"));
 		//setup Hulk Theme Colors
 			//GREEN
 		float[] green = new float[3];
@@ -110,8 +110,11 @@ public class Mainwindow extends JFrame{
 	public static void main(String[] args){
 		WindowContainer test = new WindowContainer();
 		Mainwindow      login = new Mainwindow();
+               // NewChatView testone = new NewChatView();
 		test.setWindow(login.view);
 		login.AllViews.addToViewArray(test);
+		login.AllViews.addToViewArray(login);
+               //login.AllViews.addToViewArray(testone);
 	}
 	
 	public void addHulkListenner(ActionListener HulkListener){

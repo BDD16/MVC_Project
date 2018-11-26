@@ -12,14 +12,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Model.Authentication;
+import Model.Avenger;
 import Model.AzgardMessaging;
 import Model.DrBanner;
 import Model.GammaEngine;
 import Model.GammaMachine;
 import View.MainChat;
 import View.Mainwindow;
+import View.NewChatView;
 import View.Settings;
 import View.WindowContainer;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AuthenticationController implements MouseListener {
 	
@@ -68,19 +73,27 @@ public class AuthenticationController implements MouseListener {
 						original =  (WindowContainer) MainView.AllViews.getView("WindowContainer");
 
 						this.MainView.getView().setVisible(false);
-						MainChat chatview = new MainChat();
+						MainChat chatview = new MainChat(this.MainView.AllViews);
+                                                NewChatView test = new NewChatView(this.MainView);
+                                            try {
+                                                chatview.controller.getAvengerRelationalDB().AddAnAvenger(MainView.getUsername(), new Avenger(MainView.getUsername()));
+                                            } catch (URISyntaxException ex) {
+                                                Logger.getLogger(AuthenticationController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
 						chatview.AllViews = this.MainView.AllViews;
 						chatview.AllViews.addToViewArray(chatview);
 						chatview.addMouseListener(this);
 						chatview.controller.setMainWindow(this.MainView);
 						original.getWindow().remove(this.MainView.getView());
-						original.setWindow((JPanel) chatview.getView());
+                                                test.mainwindow = this.MainView;
+						original.setWindow((JPanel) test/*chatview.getView()*/);
 						original.getWindow().setVisible(true);
 						
 						//Turn on P2P Server
 						
-						
-						Thread x = new Thread(new DrBanner());//client
+						DrBanner y = new DrBanner();
+						Thread x = new Thread(y);//client
+						chatview.Client = y;
 						x.start();
 						try {
 							P2PServer = new AzgardMessaging();
@@ -113,6 +126,11 @@ public class AuthenticationController implements MouseListener {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+	}
+
+	private Avenger NewAvenger(String username) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

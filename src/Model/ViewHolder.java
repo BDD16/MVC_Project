@@ -2,6 +2,7 @@ package Model;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class ViewHolder extends ViewSwitcher {
 	
@@ -35,5 +36,26 @@ public class ViewHolder extends ViewSwitcher {
 		this.getViewArray().removeElement(viewToRemove);
 		
 	}
+        
+        public void addToViewPanelArray(JPanel viewToAdd){
+            if(ViewArrayJPanel == null){
+                ViewArrayJPanel = new DefaultListModel<JPanel>();
+                this.getViewArrayJPanel().addElement(viewToAdd);
+            }
+        }
+
+    @Override
+    public JPanel getViewPanel(String panel) {
+        if(ViewArrayJPanel == null){
+			ViewArrayJPanel = new DefaultListModel<JPanel>();
+		}
+		for(int i = 0; i < ViewArrayJPanel.getSize(); i += 1){
+			if (ViewArrayJPanel.getElementAt(i).getName() == panel){
+				return ViewArrayJPanel.getElementAt(i);
+			}
+		}
+		//Didn't find anything
+		return null;
+    }
 
 }

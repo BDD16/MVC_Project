@@ -21,7 +21,7 @@ public class Authentication extends AbstractModel {
 			String compareThisString = bytesToHex(compareThis);
 			//2)compare with the sha256 of the stored pwd
 			boolean result = DoesPasswordMatch(Username, compareThisString);
-			if(Username.equals("Dr.Banner")){
+			if(Username.equals("Dr.Banner")){//For testing purposes leave to Dr.Banner else cahnge to result
 				return true;
 			}
 			
@@ -41,6 +41,16 @@ public class Authentication extends AbstractModel {
 	
 	public static boolean DoesPasswordMatch(String Username, String PasswordSha256 ){
 		//TBD
+		
+		//1)Parse json file
+		
+		//2)look for username.json
+		
+		//if the username doesn't exist then it hasn't been established on this particular computer
+		//so need to create the new username and password make sure to blacklist some characters to
+		//avoid sql injection attacks or DOS attacks <>/\:.! in the database
+		
+		//
 		return true;
 	}
 	

@@ -19,7 +19,7 @@ public class WindowContainer extends JFrame{
 	
 	public void Init(){
 		this.setWindow(new JFrame("Hulk Chat App"));
-		this.getWindow().setSize(400,647);//done by the golden ratio
+		this.getWindow().setSize(450,647);//done by the golden ratio
 		this.getWindow().setOpacity((float) 1.0);
 		this.getWindow().setLocationRelativeTo(null);
 		((JFrame) this.getWindow()).setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

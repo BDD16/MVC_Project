@@ -30,7 +30,7 @@ import javax.swing.ScrollPaneLayout;
 import javax.swing.table.TableCellRenderer;
 
 import Controller.HulkController;
-import Model.CellRenderer;
+import Model.HULKCellRenderer;
 import Model.DrBanner;
 import Model.GammaEngine;
 import Model.GammaMachine;
@@ -49,6 +49,7 @@ public class MainChat extends JFrame {
 	public JLabel gammaLabel;
 	public HulkController controller;
 	public JProgressBar progressBar;
+	public DrBanner Client;
 	
 	private static final int TXT_AREA_ROWS = 25;
     private static final int TXT_AREA_COLS = 80;
@@ -59,22 +60,27 @@ public class MainChat extends JFrame {
 		this.Init();
 	}
 	
+	public MainChat(ViewHolder allViews2) {
+		AllViews = allViews2;
+		this.Init();
+	}
+
 	public void Init(){
 		JPanel panel = new JPanel();
 		JTextArea message = new JTextArea();
 		JTextArea cipher = new JTextArea();
 		JTextArea plaintext = new JTextArea();
 		JLabel gamma = new JLabel();
-		ImageIcon gammaicon = new ImageIcon("src/img/GammaSignSmall.png");
+		ImageIcon gammaicon = new ImageIcon(getClass().getResource("/img/GammaSignSmall.png"));
 		gamma.setName("GammaRaySign");
 		JLabel logoutimg = new JLabel();
-		ImageIcon logouticon = new ImageIcon("src/img/Logout.png");//make sure to fill this in once the graphic is there
+		ImageIcon logouticon = new ImageIcon(getClass().getResource("/img/Logout.png"));//make sure to fill this in once the graphic is there
 		JLabel friendsimg = new JLabel();
-		ImageIcon friendsicon = new ImageIcon("src/img/FriendsSmall.png");
+		ImageIcon friendsicon = new ImageIcon(getClass().getResource("/img/FriendsSmall.png"));
 		JLabel settingsimg = new JLabel();
-		ImageIcon settingsicon = new ImageIcon("src/img/SettingsSmall.png");
+		ImageIcon settingsicon = new ImageIcon(getClass().getResource("/img/SettingsSmall.png"));
 		JLabel sendimg = new JLabel();
-		ImageIcon sendicon = new ImageIcon("src/img/send_icon_small.png");
+		ImageIcon sendicon = new ImageIcon(getClass().getResource("/img/send_icon_small.png"));
 		progressBar = new JProgressBar();
 		progressBar.setVisible(false);
 		progressBar.setLayout(null);
@@ -83,7 +89,7 @@ public class MainChat extends JFrame {
 		
 		settingsimg.setName("Settings");
 		
-		TableCellRenderer cellpattern = new CellRenderer();
+		//TableCellRenderer cellpattern = new CellRenderer();
 		
 		panel.setLayout(null);
 		message.setLayout(null);
@@ -143,7 +149,7 @@ public class MainChat extends JFrame {
 		JScrollPane Plaintextpane = new JScrollPane(panel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		Plaintextpane.add(plaintext);
 		JTable test = new JTable(TXT_AREA_ROWS,1);
-		test.setDefaultRenderer(Object.class, cellpattern);
+		test.setDefaultRenderer(Object.class, new HULKCellRenderer());
 		test.setBounds(100,100,200,350);
 		JScrollPane testpane = new JScrollPane(test,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		Plaintextpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

@@ -15,10 +15,10 @@ import javax.swing.JTextField;
 
 //server chat view that will be stored locally on each machine, so each machine is it's own server.
 public class DrBanner implements Runnable {
-	BufferedReader in;
-    PrintWriter out;
+	private BufferedReader in;
+    private PrintWriter out;
     JTextArea textField = new JTextArea(8,40);
-    JTextArea messageArea = new JTextArea(8, 40);
+    private JTextArea messageArea = new JTextArea(8, 40);
     private static final int PORT = 9001;
 
 	
@@ -37,6 +37,10 @@ public DrBanner(JTextArea textField, JTextArea messageArea){
 public DrBanner() {
 		// TODO Auto-generated constructor stub
 	}
+
+public void write(String secret){
+	out.println(secret);
+}
 
 /**
  * Prompt for and return the address of the server.
@@ -109,6 +113,9 @@ public void run() {
             textField.setEditable(true);
         } else if (line.startsWith("MESSAGE")) {
             messageArea.append(line.substring(8) + "\n");
+        }
+        else{
+        	messageArea.append(line);
         }
     }
 }

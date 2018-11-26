@@ -13,6 +13,7 @@ import Model.GammaMachine;
 import View.AvengersList;
 import View.MainChat;
 import View.Mainwindow;
+import View.NewChatView;
 import View.Settings;
 import View.WindowContainer;
 
@@ -23,6 +24,7 @@ public class SettingsSmasher implements MouseListener{
 		private MainChat MainChatView;
 		private GammaEngine Encryption;
 		private Settings settingsView;
+                private NewChatView View;
 		
 		public SettingsSmasher(Mainwindow theView, GammaMachine theModel){
 			this.MainView = theView;
@@ -31,6 +33,11 @@ public class SettingsSmasher implements MouseListener{
 			
 			
 		}
+                
+                public SettingsSmasher(NewChatView view){
+                    View = view;
+                    
+                }
 		
 		private void setModel(GammaMachine theModel) {
 			model = theModel;

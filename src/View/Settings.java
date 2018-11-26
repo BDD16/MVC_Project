@@ -30,7 +30,8 @@ import Model.ViewHolder;
 public class Settings extends JFrame {
 	JPanel view;
 	public SettingsSmasher controller;
-	
+	private JTextField prvkey;
+	private JTextField publickey;
 	public ViewHolder AllViews;
 	
 	public Settings(){
@@ -44,11 +45,11 @@ public class Settings extends JFrame {
 		JTextArea cipher = new JTextArea();
 		JTextArea plaintext = new JTextArea();
 		JLabel gamma = new JLabel();
-		ImageIcon gammaicon = new ImageIcon("src/img/GammaSignSmall.png");
+		ImageIcon gammaicon = new ImageIcon(getClass().getResource("/img/GammaSignSmall.png"));
 		JLabel logoutimg = new JLabel();
-		ImageIcon logouticon = new ImageIcon("src/img/Logout.png");//make sure to fill this in once the graphic is there
+		ImageIcon logouticon = new ImageIcon(getClass().getResource("/img/Logout.png"));//make sure to fill this in once the graphic is there
 		JLabel friendsimg = new JLabel();
-		ImageIcon friendsicon = new ImageIcon("src/img/hulkmonstersmall.png");
+		ImageIcon friendsicon = new ImageIcon(getClass().getResource("/img/hulkmonstersmall.png"));
 		JLabel settingsimg = new JLabel();
 		settingsimg.setName("Settings");
 		
@@ -60,7 +61,7 @@ public class Settings extends JFrame {
 		AESkeyPath.setLayout(null);
 		
 		
-		
+		panel.setPreferredSize(new Dimension(400,647));
 		JTabbedPane JTabbedPane = new JTabbedPane();
          
         JComponent panel1 = makeTextPanel("Panel #1");
@@ -134,6 +135,9 @@ public class Settings extends JFrame {
 			e.printStackTrace();
 		}
 		
+		setPrvkey(RsakeypathPriv);
+		setPublickey(Rsakeypath);
+		
 		gamma.addMouseListener(controller);
 		friendsimg.addMouseListener(controller);
 		
@@ -169,5 +173,21 @@ public class Settings extends JFrame {
         panel.add(filler);
         return panel;
     }
+
+	public JTextField getPrvkey() {
+		return prvkey;
+	}
+
+	public void setPrvkey(JTextField rsakeypathPriv) {
+		this.prvkey = rsakeypathPriv;
+	}
+
+	public JTextField getPublickey() {
+		return publickey;
+	}
+
+	public void setPublickey(JTextField publickey) {
+		this.publickey = publickey;
+	}
 
 }
