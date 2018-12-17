@@ -138,7 +138,8 @@ public class HulkControllerNewMainChat implements MouseListener{
 				
 				
 				byte[] drbanner = hulk.RSAEncrypt(MainChatView.getPlaintextarea().getText().getBytes(), hulk.getPubkey());
-				MainChatView.getCipherarea().setText(new String(drbanner));
+				
+                                MainChatView.getCipherarea().setText(new String(drbanner));
 			} catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | NoSuchPaddingException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -200,8 +201,10 @@ public class HulkControllerNewMainChat implements MouseListener{
 				GammaMachine hulk = new GammaMachine();
 				hulk.generateKeys();
 				byte[] drbanner = hulk.RSAEncrypt(View.getPlaintextarea().getText().getBytes(), hulk.getPubkey());
+                                SendMessageController.getInstance().SetFriendKey(hulk.getPubkey());
 				View.getCipherarea().setText(new String(drbanner));
                                 View.getMainChat().addElement(View.getPlaintextarea().getText());
+                                SendMessageController.getInstance().setMyKey(hulk.getPrivateKey());
                                
                                 
 				

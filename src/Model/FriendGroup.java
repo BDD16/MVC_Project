@@ -47,9 +47,9 @@ public class FriendGroup {
     
     
     //discovered peers
-    private Vector friendsVector;
+    private Vector<Avenger> friendsVector;
     
-    FriendGroup() {
+    public FriendGroup() {
         try{
         NetPeerGroupFactory npgf = new NetPeerGroupFactory();
         
@@ -58,6 +58,8 @@ public class FriendGroup {
             System.out.println("Fatal error: creating the net peer group");
             System.exit(1);
         }
+        
+        friendsVector = new Vector<>();
         
         
        

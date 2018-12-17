@@ -7,6 +7,8 @@ package View;
 
 import Controller.HulkController;
 import Controller.HulkControllerNewMainChat;
+import Controller.PostOfficeCenter;
+import Controller.SendMessageController;
 import Controller.SettingsSmasher;
 import Model.GammaCellRenderer;
 import Model.GammaMachine;
@@ -30,11 +32,13 @@ public class NewChatView extends javax.swing.JPanel {
      */
     DefaultListModel<String> MainChat = new DefaultListModel<>();
     public Mainwindow mainwindow;
+    private PostOfficeCenter pobox;
     public NewChatView() {
         initComponents();
         plainTextArea.setLineWrap(true);
         plainTextArea.setWrapStyleWord(true);
         Cipherarea.setLineWrap(true);
+        pobox = new PostOfficeCenter();
         try {
             gammaLabel.addMouseListener(new HulkControllerNewMainChat(this, (new GammaMachine())));
         } catch (NoSuchAlgorithmException ex) {
@@ -59,6 +63,7 @@ public class NewChatView extends javax.swing.JPanel {
         plainTextArea.setLineWrap(true);
         plainTextArea.setWrapStyleWord(true);
         Cipherarea.setLineWrap(true);
+        pobox = new PostOfficeCenter();
         try {
             gammaLabel.addMouseListener(new HulkControllerNewMainChat(this, (new GammaMachine())));
         } catch (NoSuchAlgorithmException ex) {
@@ -75,6 +80,11 @@ public class NewChatView extends javax.swing.JPanel {
         } catch (NoSuchPaddingException ex) {
             Logger.getLogger(NewChatView.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Thread x = new Thread(pobox);
+        x.start();
+        
+        SendButton.addMouseListener( new SendMessageController(this, pobox.getOutputQueue(), pobox.getUserMessageQueue()));
+        
     }
     
     public  JTextArea getCipherarea(){

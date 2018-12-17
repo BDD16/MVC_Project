@@ -4,12 +4,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.*;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.crypto.*;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -25,22 +29,39 @@ public class GammaMachine extends AbstractModel {
 	@SuppressWarnings("static-access")
 	public GammaMachine() throws NoSuchAlgorithmException, NoSuchPaddingException{
 		this.cipher = this.cipher.getInstance("RSA");
-                AEScipher = AEScipher.getInstance("AES/GCM/PKCS5Padding");
+                AEScipher = AEScipher.getInstance("AES/GCM/NoPadding");
 	}
         
-        public byte[] AESEncrypt(byte[] plaintext, Key key) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
-            byte[] result = null;
-            AEScipher.init(AEScipher.ENCRYPT_MODE, key);
-            result = AEScipher.doFinal(plaintext);
-            result = Base64.getEncoder().encode(result);
-            
-            return result;
-            
+        public PrivateKey getPrivateKey(){
+            return prvkey;
         }
         
-        public byte[] AESDecrypt(byte[] ciphertext, Key key) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
+        public byte[] AESEncrypt(byte[] plaintext, Key keyone, GCMParameterSpec spec) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
+            try {
+                byte[] result = null;
+                SecureRandom secureRandom = new SecureRandom();
+                secureRandom.nextBytes(keyone.getEncoded());
+                SecretKey secretKey = null;
+                
+                secretKey = new SecretKeySpec(keyone.getEncoded(),"AES/GCM/NoPadding");
+                //byte[] iv = new byte[12]; //NEVER REUSE THIS IV WITH SAME KEY
+                //secureRandom.nextBytes(iv);
+                //GCMParameterSpec parameterSpec = new GCMParameterSpec(128, iv);
+                AEScipher.init(AEScipher.ENCRYPT_MODE, keyone, spec);
+                result = AEScipher.doFinal(plaintext);
+                result = Base64.getEncoder().encode(result);
+                
+                return result;
+            } catch (InvalidAlgorithmParameterException ex) {
+                Logger.getLogger(GammaMachine.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return null;
+        }
+        
+        public byte[] AESDecrypt(byte[] ciphertext, Key key, GCMParameterSpec spec) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException{
             byte[] result = null;
-		AEScipher.init(AEScipher.DECRYPT_MODE, key);
+            SecretKeySpec keyspec = new SecretKeySpec(key.getEncoded(), "AES");
+		AEScipher.init(AEScipher.DECRYPT_MODE, keyspec, spec);
 		byte[] ciphertextb64 = Base64.getDecoder().decode(ciphertext);
 		result = AEScipher.doFinal(ciphertextb64);
 		return result;
@@ -55,10 +76,15 @@ public class GammaMachine extends AbstractModel {
 		return result;
 	}
 	
-	public byte[] RSADecrypt(byte[] ciphertext, Key key) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException{
+	public byte[] RSADecrypt(byte[] ciphertext, PrivateKey key) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException{
 		byte[] result = null;
-		cipher.init(cipher.DECRYPT_MODE, key);
-		byte[] ciphertextb64 = Base64.getDecoder().decode(ciphertext);
+                byte[] ciphertextb64 = null;
+		this.cipher.init(cipher.DECRYPT_MODE, key);
+                try{
+		 ciphertextb64 = Base64.getDecoder().decode((new String(ciphertext)));
+                }catch(Exception e){
+                    ciphertextb64 = ciphertext;
+                } 
 		result = cipher.doFinal(ciphertextb64);
 		return result;
 	}
@@ -70,6 +96,7 @@ public class GammaMachine extends AbstractModel {
 	   
 	   this.setPubkey(kp.getPublic());
 	   this.prvkey = kp.getPrivate();
+           
 	    
 	}
 	

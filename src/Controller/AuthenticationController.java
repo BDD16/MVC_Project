@@ -91,7 +91,7 @@ public class AuthenticationController implements MouseListener {
 						
 						//Turn on P2P Server
 						
-						DrBanner y = new DrBanner();
+						/* DrBanner y = new DrBanner();
 						Thread x = new Thread(y);//client
 						chatview.Client = y;
 						x.start();
@@ -101,7 +101,7 @@ public class AuthenticationController implements MouseListener {
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-						}
+						} */
 						
 						
 					}
